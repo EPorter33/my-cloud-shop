@@ -40,7 +40,7 @@ radius: 4px; margin: 10px;
 <p>Registration Successful</p> 
 </div> 
 <div class="success-message"> 
-<div class="success-icon"></div>
+<div class="success-icon"></div> 
 <h2>Registration Successful!</h2> 
 <p>Your account has been created successfully. Welcome to MyShop!</p> 
 <div style="margin-top: 30px;"> 
