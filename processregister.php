@@ -28,7 +28,7 @@ if ($stmt) {
 // Redirect to success page header("Location: 
 success.php"); exit(); 
 } else { 
-// Get detailed error information
+// Get detailed error information 
 $errors = sqlsrv_errors(); 
 $error_message = "Database error: "; if ($errors != 
 null) { foreach ($errors as $error) { 
@@ -61,4 +61,4 @@ header("Location: register.html?error=Please+fill+all+fields"); exit();
 // If someone tries to access this page directly header("Location: 
 register.html"); exit(); 
 } 
-?>
+?> 
