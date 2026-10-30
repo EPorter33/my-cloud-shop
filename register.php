@@ -27,7 +27,6 @@ input[type="password"] { width: 100%;
 padding: 10px; border: 1px solid #ddd; 
 border-radius: 4px; box-sizing: border
 box; 
-
 } 
 .btn { background-color: #007bff; color: 
 white; padding: 10px 20px; border: 
@@ -67,10 +66,6 @@ your email" required>
 <div class="form-group"> 
 <label>Password *</label> 
 <input type="password" name="password" placeholder=" 
-
- 
- 
-                                                                     
 Enter your password" required> 
 </div> 
 <div class="form-group"> 
@@ -80,4 +75,4 @@ Enter your password" required>
 </a></p> 
 </div> 
 </body> 
-</html>
+</html> 
