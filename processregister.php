@@ -1,64 +1,72 @@
-<?php 
-// Simple database connection 
-$serverName = "tcp:mycardiffmet.database.windows.net,1433"; $connectionOptions = array( 
-"Database" => "myDatabase", 
-"Uid" => "myadmin", 
-"PWD" => "Abcdefgh0!", 
-"Encrypt" => 1, 
-"TrustServerCertificate" => 0 
-); 
-// Process form submission if ($_SERVER[’REQUEST_METHOD’] == 
-’POST’) { 
-$name = $_POST[’name’]; 
-$email = $_POST[’email’]; 
-$password = $_POST[’password’]; 
-// Basic validation if (!empty($name) && !empty($email) && !empty($password)) { 
-// Connect to database 
-$conn = sqlsrv_connect($serverName, $connectionOptions); 
-if ($conn) { 
-// Hash password 
-$hashed_password = password_hash($password, 
-PASSWORD_DEFAULT); 
-// Insert into database 
-$sql = "INSERT INTO shopusers (name, email, password) 
-VALUES (?, ?, ?)"; 
-$params = array($name, $email, $hashed_password); $stmt = 
-sqlsrv_query($conn, $sql, $params); 
-if ($stmt) { 
-// Redirect to success page header("Location: 
-success.php"); exit(); 
-} else { 
-// Get detailed error information 
-$errors = sqlsrv_errors(); 
-$error_message = "Database error: "; if ($errors != 
-null) { foreach ($errors as $error) { 
-$error_message .= "SQLSTATE: " . $error[’ SQLSTATE’] . ", "; 
-$error_message .= "Code: " . $error[’code’] . " , "; 
-$error_message .= "Message: " . $error[’message 
-’]; 
-} 
-} 
-// Redirect back with detailed error 
-header("Location: register.html?error=" . urlencode( 
-$error_message)); 
-exit(); 
-} 
-sqlsrv_free_stmt($stmt); sqlsrv_close($conn); 
-} else { 
-$connection_errors = sqlsrv_errors(); 
-$conn_error_message = "Database connection failed: "; if ($connection_errors != 
-null) { foreach ($connection_errors as $error) { 
-$conn_error_message .= $error[’message’]; 
-} 
-} 
-header("Location: register.html?error=" . urlencode( 
-$conn_error_message)); exit(); 
-} 
-} else { 
-header("Location: register.html?error=Please+fill+all+fields"); exit(); 
-} 
-} else { 
-// If someone tries to access this page directly header("Location: 
-register.html"); exit(); 
-} 
-?> 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyShop - Welcome</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .welcome-text {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.2em;
+            color: #555;
+        }
+
+        .signup-link {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        .signup-link:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>MyShop</h1>
+            <p>Your one-stop destination for amazing products</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="welcome-text">
+            <h2>Welcome to MyShop</h2>
+            <p>Join our community today to access exclusive deals and features!</p>
+
+            <a href="register.php" class="signup-link">
+                Create Your Account
+            </a>
+        </div>
+    </div>
+</body>
+</html>
