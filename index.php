@@ -1,3 +1,6 @@
+<?php
+require_once __DIR__ . '/auth.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -59,19 +62,23 @@
 
 <div class="header">
     <div class="container">
-        <h1>MyShop</h1>
+        <h1>Antiques Shop</h1>
         <p>Your one-stop destination for amazing products</p>
     </div>
 </div>
 
 <div class="container">
     <div class="welcome-text">
-        <h2>Welcome to MyShop</h2>
+        <h2>Welcome to Antiques Shop</h2>
         <p>Join our community today to access exclusive deals and features!</p>
 
-        <a href="register.php" class="signup-link">
-            Create Your Account
-        </a>
+        <?php if (isset($_SESSION['user'])): ?>
+            <p>Welcome, <?= htmlspecialchars($_SESSION['user']['name'], ENT_QUOTES, 'UTF-8') ?>.</p>
+            <a href="account.php" class="signup-link">Your Account</a>
+        <?php else: ?>
+            <a href="login.php" class="signup-link">Login</a>
+            <a href="register.php" class="signup-link">Create Your Account</a>
+        <?php endif; ?>
     </div>
 </div>
 

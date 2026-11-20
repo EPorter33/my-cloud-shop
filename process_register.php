@@ -1,91 +1,81 @@
 <?php
+require_once __DIR__ . '/auth.php';
+require_once __DIR__ . '/database.php';
 
-// Simple database connection
-$serverName = "tcp:mycardiffmet-ep.database.windows.net,1433";
-
-$connectionOptions = array(
-    "Database" => "myDatabase",
-    "Uid" => "myadmin",
-    "PWD" => "Abcdefgh0!",
-    "Encrypt" => 1,
-    "TrustServerCertificate" => 1
-);
-
-// Process form submission
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-
-    // Basic validation
-    if (!empty($name) && !empty($email) && !empty($password)) {
-
-        // Connect to database
-        $conn = sqlsrv_connect($serverName, $connectionOptions);
-
-        if ($conn) {
-
-            // Hash password
-            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
-            // Insert into database
-            $sql = "INSERT INTO shopusers (name, email, password) VALUES (?, ?, ?)";
-            $params = array($name, $email, $hashed_password);
-
-            $stmt = sqlsrv_query($conn, $sql, $params);
-
-            if ($stmt) {
-
-                // Redirect to success page
-                header("Location: success.php");
-                exit();
-
-            } else {
-
-                // Get detailed database error
-                $errors = sqlsrv_errors();
-                $error_message = "Database error: ";
-
-                if ($errors != null) {
-                    foreach ($errors as $error) {
-                        $error_message .= $error['message'] . " ";
-                    }
-                }
-
-                header("Location: register.php?error=" . urlencode($error_message));
-                exit();
-            }
-
-            sqlsrv_free_stmt($stmt);
-            sqlsrv_close($conn);
-
-        } else {
-
-            $connection_errors = sqlsrv_errors();
-            $conn_error_message = "Database connection failed: ";
-
-            if ($connection_errors != null) {
-                foreach ($connection_errors as $error) {
-                    $conn_error_message .= $error['message'] . " ";
-                }
-            }
-
-            header("Location: register.php?error=" . urlencode($conn_error_message));
-            exit();
-        }
-
-    } else {
-
-        header("Location: register.php?error=Please+fill+all+fields");
-        exit();
-    }
-
-} else {
-
-    // Prevent direct access
-    header("Location: register.php");
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('Location: register.php');
     exit();
 }
 
-?>
+if (!hasValidCsrfToken($_POST['csrf_token'] ?? null)) {
+    header('Location: register.php?error=session');
+    exit();
+}
+
+$name = $_POST['name'] ?? '';
+$email = $_POST['email'] ?? '';
+$password = $_POST['password'] ?? '';
+
+if (!is_string($name) || !is_string($email) || !is_string($password)) {
+    header('Location: register.php?error=invalid');
+    exit();
+}
+
+$name = trim($name);
+$email = strtolower(trim($email));
+if ($name === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($password) < 6) {
+    header('Location: register.php?error=invalid');
+    exit();
+}
+
+try {
+    $connection = getDatabaseConnection();
+} catch (RuntimeException $exception) {
+    error_log($exception->getMessage());
+    header('Location: register.php?error=server');
+    exit();
+}
+
+$statement = sqlsrv_query($connection, 'SELECT TOP 1 email FROM shopusers WHERE email = ?', [$email]);
+if ($statement === false) {
+    error_log('Registration lookup failed: ' . print_r(sqlsrv_errors(), true));
+    sqlsrv_close($connection);
+    header('Location: register.php?error=server');
+    exit();
+}
+
+$existingUser = sqlsrv_fetch_array($statement, SQLSRV_FETCH_ASSOC);
+sqlsrv_free_stmt($statement);
+
+if ($existingUser === false) {
+    error_log('Registration lookup result fetch failed: ' . print_r(sqlsrv_errors(), true));
+    sqlsrv_close($connection);
+    header('Location: register.php?error=server');
+    exit();
+}
+
+if ($existingUser) {
+    sqlsrv_close($connection);
+    header('Location: register.php?error=duplicate');
+    exit();
+}
+
+$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+$statement = sqlsrv_query(
+    $connection,
+    'INSERT INTO shopusers (name, email, password) VALUES (?, ?, ?)',
+    [$name, $email, $hashedPassword]
+);
+
+if ($statement === false) {
+    error_log('Registration insert failed: ' . print_r(sqlsrv_errors(), true));
+    sqlsrv_close($connection);
+    header('Location: register.php?error=server');
+    exit();
+}
+
+sqlsrv_free_stmt($statement);
+sqlsrv_close($connection);
+
+header('Location: login.php?registered=1');
+exit();

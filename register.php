@@ -1,3 +1,17 @@
+<?php
+require_once __DIR__ . '/auth.php';
+
+$errorMessages = [
+    'duplicate' => 'An account with that email already exists.',
+    'invalid' => 'Please enter a valid email and a password of at least 6 characters.',
+    'session' => 'Your session expired. Please try again.',
+    'server' => 'Unable to create your account right now. Please try again later.'
+];
+$errorCode = $_GET['error'] ?? '';
+$error = is_string($errorCode) && isset($errorMessages[$errorCode])
+    ? $errorMessages[$errorCode]
+    : '';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -93,13 +107,14 @@
 <div class="register-form">
     <h2>Register</h2>
 
-    <?php if (isset($_GET['error'])): ?>
+    <?php if ($error !== ''): ?>
         <div class="error">
-            <?php echo htmlspecialchars($_GET['error']); ?>
+            <?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?>
         </div>
     <?php endif; ?>
 
     <form method="post" action="process_register.php">
+        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(getCsrfToken(), ENT_QUOTES, 'UTF-8'); ?>">
 
         <div class="form-group">
             <label>Full Name *</label>
@@ -122,6 +137,9 @@
 
     </form>
 
+    <p style="text-align: center;">
+        <a href="login.php">Already have an account? Login</a>
+    </p>
     <p style="text-align: center;">
         <a href="index.php">Back to Home</a>
     </p>
