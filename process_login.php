@@ -36,7 +36,7 @@ try {
 
 $statement = sqlsrv_query(
     $connection,
-    'SELECT TOP 1 name, email, password FROM shopusers WHERE email = ?',
+    'SELECT TOP 1 name, email, password, is_admin FROM shopusers WHERE email = ?',
     [$email]
 );
 
@@ -64,7 +64,8 @@ if (!$user || !password_verify($password, $user['password'])) {
 session_regenerate_id(true);
 $_SESSION['user'] = [
     'name' => $user['name'],
-    'email' => $user['email']
+    'email' => $user['email'],
+    'is_admin' => (bool) $user['is_admin']
 ];
 unset($_SESSION['csrf_token']);
 

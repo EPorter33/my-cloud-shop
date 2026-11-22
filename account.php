@@ -20,6 +20,10 @@ $user = $_SESSION['user'];
         <h1>Your account</h1>
         <p>Welcome, <?= htmlspecialchars($user['name'], ENT_QUOTES, 'UTF-8') ?>.</p>
         <p><?= htmlspecialchars($user['email'], ENT_QUOTES, 'UTF-8') ?></p>
+        <p><a href="shop.php">Browse items</a> | <a href="cart.php">View cart</a></p>
+        <?php if (!empty($user['is_admin'])): ?>
+            <p><a href="manage_products.php">Manage product catalog</a></p>
+        <?php endif; ?>
         <form method="post" action="logout.php">
             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(getCsrfToken(), ENT_QUOTES, 'UTF-8') ?>">
             <button type="submit">Log out</button>

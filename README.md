@@ -17,3 +17,20 @@ Configure these environment variables for the PHP web server:
 The PHP SQLSRV extension must be enabled. Configure a unique index on the
 `email` column to prevent duplicate accounts, and rotate any database
 credentials that were previously stored in PHP source files.
+
+## Demo shop
+
+Signed-in users can browse products in `shop.php` and manage a session-based
+cart in `cart.php`. Run `product_catalog_schema.sql` against the Azure SQL
+database before deploying the catalog changes. Register your account, then
+promote it to a catalog administrator by running this query with your email:
+
+```sql
+UPDATE dbo.shopusers SET is_admin = 1 WHERE email = N'your-email@example.com';
+```
+
+Sign out and back in after making yourself an administrator. Administrators
+can add and edit products, set stock, assign fixed categories, and deactivate
+products in `manage_products.php`. Product availability is read from the
+database, and demo checkout deducts stock in a transaction. It does not collect
+payment details or save orders.
