@@ -6,7 +6,7 @@ require_once __DIR__ . '/auth.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cloud cart</title>
+    <title>Antiques Shop</title>
 
     <style>
         body {
@@ -69,7 +69,7 @@ require_once __DIR__ . '/auth.php';
 
 <div class="container">
     <div class="welcome-text">
-        <h2>Welcome to Antiques Shop</h2>
+        <h2>Welcome to my Antiques Shop</h2>
         <p>Join our community today to access exclusive deals and features!</p>
 
         <?php if (isset($_SESSION['user'])): ?>

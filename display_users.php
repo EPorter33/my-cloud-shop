@@ -6,7 +6,7 @@ ini_set('display_errors', 1);
 
 // Database configuration for Azure MySQL
 $host = "apptestdb.mysql.database.azure.com";
-$username = "AdminTest";
+$username = "admin";
 $password = "Abcdefgh0!";
 $database = "myDatabase";
 
