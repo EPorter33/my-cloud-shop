@@ -8,7 +8,7 @@ ini_set('display_errors', 1);
 $host = "apptestdb.mysql.database.azure.com";
 $username = "AdminTest";
 $password = "Abcdefgh0!";
-$database = "mydatabase";
+$database = "myDatabase";
 
 try {
 
