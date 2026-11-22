@@ -18,6 +18,11 @@ The PHP SQLSRV extension must be enabled. Configure a unique index on the
 `email` column to prevent duplicate accounts, and rotate any database
 credentials that were previously stored in PHP source files.
 
+Signed-in users can change their own password from `account.php` by entering
+their current password and confirming a new password. There is no email-based
+recovery flow; a user who has forgotten their password needs an administrator
+to help them.
+
 ## Demo shop
 
 Signed-in users can browse products in `shop.php` and manage a session-based
