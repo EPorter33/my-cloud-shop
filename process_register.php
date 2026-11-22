@@ -44,16 +44,15 @@ if ($statement === false) {
     exit();
 }
 
-$existingUser = sqlsrv_fetch_array($statement, SQLSRV_FETCH_ASSOC);
-sqlsrv_free_stmt($statement);
-
-if ($existingUser === false) {
+$existingUser = sqlsrv_has_rows($statement);
+if ($existingUser === false && sqlsrv_errors() !== null) {
     error_log('Registration lookup result fetch failed: ' . print_r(sqlsrv_errors(), true));
+    sqlsrv_free_stmt($statement);
     sqlsrv_close($connection);
     header('Location: register.php?error=server');
     exit();
 }
-
+sqlsrv_free_stmt($statement);
 if ($existingUser) {
     sqlsrv_close($connection);
     header('Location: register.php?error=duplicate');

@@ -61,7 +61,6 @@ if (!$user || !password_verify($password, $user['password'])) {
     header('Location: login.php?error=invalid');
     exit();
 }
-
 session_regenerate_id(true);
 $_SESSION['user'] = [
     'name' => $user['name'],

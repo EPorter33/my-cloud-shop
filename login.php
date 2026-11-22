@@ -41,7 +41,7 @@ $error = is_string($errorCode) && isset($errorMessages[$errorCode])
         <div class="error"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></div>
     <?php endif; ?>
     <?php if (isset($_GET['registered']) && $_GET['registered'] === '1'): ?>
-        <div class="success">Account created. Please sign in.</div>
+        <div class="success">Account created. You can now sign in.</div>
     <?php endif; ?>
     <form method="post" action="process_login.php">
         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(getCsrfToken(), ENT_QUOTES, 'UTF-8') ?>">
