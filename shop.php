@@ -46,28 +46,43 @@ if (is_array($cart)) {
     <style>
         body { font-family: Arial, sans-serif; margin: 0; background: #f4f4f4; color: #222; }
         header { background: #2c3e50; color: white; padding: 20px; }
+        .header-content { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 20px; }
         header h1 { margin: 0; }
+        .top-nav { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+        .top-nav a { color: white; text-decoration: none; }
+        .top-nav a:hover { text-decoration: underline; }
         main { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
         .notice { padding: 12px; background: #fff3cd; border: 1px solid #ffecb5; border-radius: 5px; }
-        .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin-top: 20px; }
         .category { margin: 28px 0; }
         .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; }
         .product { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
         .price { font-weight: bold; font-size: 1.2em; }
         button, .link-button { display: inline-block; padding: 10px 16px; border: 0; border-radius: 4px; color: white; background: #007bff; text-decoration: none; cursor: pointer; }
         button:disabled { background: #6c757d; cursor: not-allowed; }
-        .links { margin-top: 24px; }
-        .links a { margin-right: 14px; }
+        @media (max-width: 600px) {
+            .header-content { align-items: flex-start; flex-direction: column; }
+        }
     </style>
 </head>
 <body>
 <header>
-    <h1>Antiques Shop</h1>
-    <p>Browse our sample antiques</p>
+    <div class="header-content">
+        <div>
+            <h1>Antiques Shop</h1>
+            <p>Browse our sample antiques</p>
+        </div>
+        <nav class="top-nav" aria-label="Main navigation">
+            <a href="shop.php">Browse</a>
+            <a href="cart.php">Cart (<?= $cartCount ?>)</a>
+            <a href="account.php">Manage account</a>
+            <?php if (!empty($_SESSION['user']['is_admin'])): ?>
+                <a href="manage_products.php">Manage catalog</a>
+            <?php endif; ?>
+        </nav>
+    </div>
 </header>
 <main>
     <p class="notice">Demo shop: checkout updates stock but does not take payment or save an order.</p>
-    <p><a class="link-button" href="cart.php">View cart (<?= $cartCount ?>)</a></p>
     <?php if ($catalogError): ?>
         <p role="alert">The product catalog could not be loaded.</p>
     <?php elseif (!$groupedProducts): ?>
@@ -95,13 +110,7 @@ if (is_array($cart)) {
             </section>
         <?php endforeach; ?>
     <?php endif; ?>
-    <nav class="links">
-        <a href="account.php">Your account</a>
-        <?php if (!empty($_SESSION['user']['is_admin'])): ?>
-            <a href="manage_products.php">Manage catalog</a>
-        <?php endif; ?>
-        <a href="index.php">Home</a>
-    </nav>
+    <p><a href="index.php">Back to home</a></p>
 </main>
 </body>
 </html>

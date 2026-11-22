@@ -69,5 +69,5 @@ $_SESSION['user'] = [
 ];
 unset($_SESSION['csrf_token']);
 
-header('Location: account.php');
+header('Location: shop.php');
 exit();

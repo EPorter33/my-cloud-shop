@@ -25,8 +25,9 @@ to help them.
 
 ## Demo shop
 
-Signed-in users can browse products in `shop.php` and manage a session-based
-cart in `cart.php`. Run `product_catalog_schema.sql` against the Azure SQL
+After sign-in, users land on `shop.php`, where the header links to browsing,
+the cart, and account management. Users can manage a session-based cart in
+`cart.php`. Run `product_catalog_schema.sql` against the Azure SQL
 database before deploying the catalog changes. Register your account, then
 promote it to a catalog administrator by running this query with your email:
 
