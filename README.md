@@ -2,14 +2,14 @@
 
 ## Login and registration
 
-The login and registration pages use the SQL Server `shopusers` table with
+The login and registration pages use the Azure SQL `shopusers` table with
 `name`, `email`, and `password` columns. Passwords must be stored as hashes
 created by PHP's `password_hash()`; login verifies them with
 `password_verify()`.
 
 Configure these environment variables for the PHP web server:
 
-- `SHOP_DB_SERVER` — SQL Server host, optionally including the port
+- `SHOP_DB_SERVER` — SQL Server endpoint, for example `tcp:myserver.database.windows.net,1433`
 - `SHOP_DB_DATABASE` — database name
 - `SHOP_DB_USERNAME` — database login
 - `SHOP_DB_PASSWORD` — database password

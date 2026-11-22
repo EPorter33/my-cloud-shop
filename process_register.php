@@ -36,7 +36,11 @@ try {
     exit();
 }
 
-$statement = sqlsrv_query($connection, 'SELECT TOP 1 email FROM shopusers WHERE email = ?', [$email]);
+$statement = sqlsrv_query(
+    $connection,
+    'SELECT TOP 1 email FROM shopusers WHERE email = ?',
+    [$email]
+);
 if ($statement === false) {
     error_log('Registration lookup failed: ' . print_r(sqlsrv_errors(), true));
     sqlsrv_close($connection);
@@ -44,15 +48,14 @@ if ($statement === false) {
     exit();
 }
 
-$existingUser = sqlsrv_has_rows($statement);
-if ($existingUser === false && sqlsrv_errors() !== null) {
+$existingUser = sqlsrv_fetch_array($statement, SQLSRV_FETCH_ASSOC);
+sqlsrv_free_stmt($statement);
+if ($existingUser === false) {
     error_log('Registration lookup result fetch failed: ' . print_r(sqlsrv_errors(), true));
-    sqlsrv_free_stmt($statement);
     sqlsrv_close($connection);
     header('Location: register.php?error=server');
     exit();
 }
-sqlsrv_free_stmt($statement);
 if ($existingUser) {
     sqlsrv_close($connection);
     header('Location: register.php?error=duplicate');
