@@ -1,9 +1,21 @@
 <?php
 
-echo "<h1>Microsoft Login Successful</h1>";
+require_once __DIR__ . '/../auth.php';
 
-echo "<h2>Returned Parameters</h2>";
+if (!isset($_GET['code'])) {
+    header('Location: /login.php');
+    exit();
+}
 
-echo "<pre>";
-print_r($_GET);
-echo "</pre>";
+/*
+ * Temporary Microsoft user session
+ * We will improve this later to read the real
+ * Microsoft name and email from Graph API.
+ */
+$_SESSION['user'] = [
+    'name' => 'Microsoft User',
+    'email' => 'microsoft@example.com'
+];
+
+header('Location: /shop.php');
+exit();
