@@ -54,6 +54,7 @@ $error = is_string($errorCode) && isset($errorMessages[$errorCode])
             <input id="password" type="password" name="password" autocomplete="current-password" required>
         </div>
         <button class="btn" type="submit">Sign in</button>
+        
     </form>
     <p>Need an account? <a href="register.php">Register</a></p>
     <p><a href="index.php">Back to home</a></p>
